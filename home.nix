@@ -8,6 +8,7 @@
 {
   imports = [
     inputs.noctalia.homeModules.default
+    ./modules/niri.nix
   ];
 
   home = {
@@ -27,6 +28,7 @@
       ripgrep
       fd
       nixpkgs-fmt
+      nautilus
       nodejs
       unzip
       gcc
@@ -53,18 +55,6 @@
 
     noctalia = {
       enable = true;
-    };
-
-    niri = {
-      settings = {
-        spawn-at-startup = [
-          { command = [ "noctalia" ]; }
-        ];
-
-        binds = {
-          "Mod+Return".action.spawn = [ "kitty" ];
-        };
-      };
     };
   };
 
