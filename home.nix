@@ -1,12 +1,41 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   imports = [
     inputs.noctalia.homeModules.default
   ];
 
-  home.username = "seb";
+  home = {
+    stateVersion = "26.05";
+    username = "seb";
 
+    sessionPath = [
+      "$.cargo/bin"
+    ];
+
+    packages = with pkgs; [
+      neovim
+      rustup
+      kitty
+      tree-sitter
+      fzf
+      ripgrep
+      fd
+      nixpkgs-fmt
+      nodejs
+      unzip
+      gcc
+      pkg-config
+      statix
+      openssl
+      openssl.dev
+    ];
+  };
   programs = {
     git = {
       enable = true;
@@ -33,15 +62,15 @@
         ];
 
         binds = {
-          "Mod+Return".action.spawn = [ "kitty" ]; 
+          "Mod+Return".action.spawn = [ "kitty" ];
         };
       };
     };
   };
 
-  home.packages = with pkgs; [
-    kitty
-  ];
+  xdg.configFile."nvim" = {
+    source = config.lib.file.mkOutOfStoreSymlink "/home/seb/nixos-dotfiles/config/nvim";
+    recursive = true;
+  };
 
-  home.stateVersion = "26.05";
 }

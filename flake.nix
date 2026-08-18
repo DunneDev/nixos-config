@@ -20,24 +20,33 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, niri, noctalia, ... }: {
-    nixosConfigurations.seb-probook = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./configuration.nix
-	niri.nixosModules.niri
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.seb = import ./home.nix;
-	    extraSpecialArgs = { inherit inputs; };
-            backupFileExtension = "backup";
-          };
-        }
-      ];
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      niri,
+      noctalia,
+      ...
+    }:
+    {
+      nixosConfigurations.seb-probook = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./configuration.nix
+          niri.nixosModules.niri
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.seb = import ./home.nix;
+              extraSpecialArgs = { inherit inputs; };
+              backupFileExtension = "backup";
+            };
+          }
+        ];
+      };
     };
-  };
 }

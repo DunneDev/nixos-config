@@ -1,4 +1,7 @@
-{ config, lib, pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   imports = [ ./hardware-configuration.nix ];
@@ -14,15 +17,17 @@
 
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  services.displayManager.ly.enable = true;
-  services.printing.enable = true;
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
+  services = {
+    displayManager.ly.enable = true;
+    printing.enable = true;
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+    };
+    libinput.enable = true;
+    power-profiles-daemon.enable = true;
+    upower.enable = true;
   };
-  services.libinput.enable = true;
-  services.power-profiles-daemon.enable = true;
-  services.upower.enable = true;
 
   xdg.portal = {
     enable = true;
@@ -33,15 +38,22 @@
 
   users.users.seb = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "networkmanager" ];
+    extraGroups = [
+      "wheel"
+      "video"
+      "audio"
+      "networkmanager"
+    ];
     packages = with pkgs; [
       tree
     ];
   };
 
-  programs.firefox.enable = true;
-  programs.fish.enable = true;
-  programs.niri.enable = true;
+  programs = {
+    firefox.enable = true;
+    fish.enable = true;
+    niri.enable = true;
+  };
 
   programs.noctalia = {
     enable = true;
@@ -51,14 +63,20 @@
   };
 
   environment.systemPackages = with pkgs; [
-    neovim
+    vim
     wget
+  ];
+
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
   ];
 
   hardware.bluetooth.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   system.stateVersion = "26.05";
 }
-
